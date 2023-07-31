@@ -1,5 +1,5 @@
 package toy.mytrip.member.domain;
 
-public enum Autority {
+public enum Authority {
     ADMIN, USER
 }

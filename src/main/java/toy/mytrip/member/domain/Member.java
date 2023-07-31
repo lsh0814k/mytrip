@@ -10,7 +10,7 @@ public class Member {
     public Member() {}
 
     @Builder
-    public Member(Long id, String loginId, String password, String name, String rrnId, String birth, String email, String phoneNumber, Long mileage, Autority autority) {
+    public Member(Long id, String loginId, String password, String name, String rrnId, String birth, String email, String phoneNumber, Long mileage, Authority authority) {
         this.id = id;
         this.loginId = loginId;
         this.password = password;
@@ -20,7 +20,7 @@ public class Member {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.mileage = mileage;
-        this.autority = autority;
+        this.authority = authority;
     }
 
     @Id @GeneratedValue
@@ -51,5 +51,5 @@ public class Member {
 
     @Column(length = 10)
     @Enumerated(EnumType.STRING)
-    private Autority autority;
+    private Authority authority;
 }

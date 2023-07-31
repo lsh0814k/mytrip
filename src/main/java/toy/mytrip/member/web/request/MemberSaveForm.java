@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import toy.mytrip.member.domain.Autority;
+import toy.mytrip.member.domain.Authority;
 import toy.mytrip.member.domain.Member;
 
 @Getter
@@ -46,7 +46,7 @@ public class MemberSaveForm {
     private final String phoneNumber;
 
     @NotEmpty
-    private final Autority autority;
+    private final Authority authority;
 
     public Member createMember() {
         return Member.builder()
@@ -57,7 +57,7 @@ public class MemberSaveForm {
                 .birth(this.birth)
                 .email(this.email)
                 .phoneNumber(this.phoneNumber)
-                .autority(this.autority)
+                .authority(this.authority)
                 .build();
     }
 }

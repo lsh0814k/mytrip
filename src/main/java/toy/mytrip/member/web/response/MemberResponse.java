@@ -2,7 +2,7 @@ package toy.mytrip.member.web.response;
 
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import toy.mytrip.member.domain.Autority;
+import toy.mytrip.member.domain.Authority;
 import toy.mytrip.member.domain.Member;
 
 
@@ -20,17 +20,17 @@ public class MemberResponse {
 
     private String phoneNumber;
 
-    private Autority autority;
+    private Authority authority;
 
     @Builder
-    public MemberResponse(String loginId, String name, String rrnId, String birth, String email, String phoneNumber, Autority autority) {
+    public MemberResponse(String loginId, String name, String rrnId, String birth, String email, String phoneNumber, Authority authority) {
         this.loginId = loginId;
         this.name = name;
         this.rrnId = rrnId;
         this.birth = birth;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.autority = autority;
+        this.authority = authority;
     }
 
     public MemberResponse create(Member member) {
@@ -41,7 +41,7 @@ public class MemberResponse {
                 .birth(member.getBirth())
                 .email(member.getEmail())
                 .phoneNumber(member.getPhoneNumber())
-                .autority(member.getAutority())
+                .authority(member.getAuthority())
                 .build();
     }
 }
