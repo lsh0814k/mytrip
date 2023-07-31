@@ -1,4 +1,4 @@
-package toy.mytrip.member.domain;
+package toy.mytrip.app.member.domain;
 
 public enum Authority {
     ADMIN, USER

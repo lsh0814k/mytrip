@@ -1,4 +1,4 @@
-package toy.mytrip.member.domain;
+package toy.mytrip.app.member.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -52,4 +52,24 @@ public class Member {
     @Column(length = 10)
     @Enumerated(EnumType.STRING)
     private Authority authority;
+
+    public MemberEditor.MemberEditorBuilder toEditor() {
+        return MemberEditor
+                .builder()
+                .name(this.name)
+                .rrnId(this.rrnId)
+                .birth(this.birth)
+                .email(this.email)
+                .phoneNumber(this.phoneNumber)
+                .authority(this.authority);
+    }
+
+    public void edit(MemberEditor editor) {
+        this.name = editor.getName();
+        this.rrnId = editor.getRrnId();
+        this.birth = editor.getBirth();
+        this.email = editor.getEmail();
+        this.phoneNumber = editor.getPhoneNumber();
+        this.authority = editor.getAuthority();
+    }
 }

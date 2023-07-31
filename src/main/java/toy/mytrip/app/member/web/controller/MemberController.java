@@ -1,13 +1,13 @@
-package toy.mytrip.member.web.controller;
+package toy.mytrip.app.member.web.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import toy.mytrip.member.domain.Member;
-import toy.mytrip.member.service.MemberService;
-import toy.mytrip.member.web.request.MemberSaveForm;
-import toy.mytrip.member.web.request.MemberUpdateForm;
-import toy.mytrip.member.web.response.MemberResponse;
+import toy.mytrip.app.member.domain.Member;
+import toy.mytrip.app.member.service.MemberService;
+import toy.mytrip.app.member.web.request.MemberSaveForm;
+import toy.mytrip.app.member.web.request.MemberUpdateForm;
+import toy.mytrip.app.member.web.response.MemberResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ public class MemberController {
     public List<MemberResponse> findAll() {
         List<Member> members = memberService.findAll();
         return members.stream()
-                .map(member -> new MemberResponse().create(member))
+                .map(member -> new MemberResponse(member))
                 .collect(Collectors.toList());
     }
 
@@ -31,7 +31,7 @@ public class MemberController {
     public MemberResponse findMember(@PathVariable Long id) {
         Member member = memberService.findMember(id);
 
-        return new MemberResponse().create(member);
+        return new MemberResponse(member);
     }
 
     @PostMapping

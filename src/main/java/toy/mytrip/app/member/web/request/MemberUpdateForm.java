@@ -1,12 +1,12 @@
-package toy.mytrip.member.web.request;
+package toy.mytrip.app.member.web.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import toy.mytrip.member.domain.Authority;
-import toy.mytrip.member.domain.Member;
+import toy.mytrip.app.member.domain.Authority;
+import toy.mytrip.app.member.domain.Member;
 
 @Getter
 @RequiredArgsConstructor
