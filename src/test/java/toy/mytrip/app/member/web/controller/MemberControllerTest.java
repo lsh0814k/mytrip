@@ -13,6 +13,7 @@ import toy.mytrip.app.member.domain.Member;
 import toy.mytrip.app.member.exception.MemberErrorCodes;
 import toy.mytrip.app.member.repository.MemberRepository;
 import toy.mytrip.app.member.web.request.MemberSaveForm;
+import toy.mytrip.app.member.web.request.MemberUpdateForm;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -218,7 +219,62 @@ class MemberControllerTest {
     }
 
     @Test
-    void editMember() {
+    @DisplayName("회원 수정")
+    void editMember() throws Exception {
+        // given
+        Member member = Member.builder()
+                .loginId("adminuser")
+                .password("qwe123!@#")
+                .name("관리자")
+                .rrnId("1241156")
+                .birth("931116")
+                .email("adminuser@gamil.com")
+                .phoneNumber("01051515321")
+                .authority(Authority.ADMIN)
+                .build();
+        memberRepository.save(member);
 
+       // when
+        MemberUpdateForm updateForm = MemberUpdateForm.builder()
+                .id(member.getId())
+                .name("일반 회원")
+                .rrnId("1241156")
+                .birth("931116")
+                .email("adminuser@gamil.com")
+                .phoneNumber("01051515321")
+                .authority(Authority.USER)
+                .build();
+        // expected
+        mockMvc.perform(patch("/members/{id}", member.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateForm))
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("회원 수정(존재하지 않는 회원인 경우)")
+    void memberEdit_not_found() throws Exception {
+        // given
+        MemberUpdateForm updateForm = MemberUpdateForm.builder()
+                .id(1L)
+                .name("일반 회원")
+                .rrnId("1241156")
+                .birth("931116")
+                .email("adminuser@gamil.com")
+                .phoneNumber("01051515321")
+                .authority(Authority.USER)
+                .build();
+
+        // expected
+        mockMvc.perform(patch("/members/{id}", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateForm))
+                )
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(MemberErrorCodes.NOT_FOUND.getStatus()))
+                .andExpect(jsonPath("$.message").value(MemberErrorCodes.NOT_FOUND.getErrorMessage()));
     }
 }
