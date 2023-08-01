@@ -6,10 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 import toy.mytrip.app.member.domain.Authority;
 import toy.mytrip.app.member.domain.Member;
+import toy.mytrip.app.member.domain.Password;
 import toy.mytrip.app.member.exception.MemberErrorCodes;
 import toy.mytrip.app.member.repository.MemberRepository;
 import toy.mytrip.errors.codes.ErrorCode;
@@ -38,7 +37,7 @@ class MemberServiceTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -73,7 +72,7 @@ class MemberServiceTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -106,7 +105,7 @@ class MemberServiceTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -120,7 +119,7 @@ class MemberServiceTest {
         Member findMember = memberRepository.findById(member.getId()).orElseThrow();
         // then
         assertEquals(member.getLoginId(), findMember.getLoginId());
-        assertEquals(member.getPassword(), findMember.getPassword());
+        assertEquals(member.getPassword().getValue(), findMember.getPassword().getValue());
         assertEquals(member.getName(), findMember.getName());
         assertEquals(member.getRrnId(), findMember.getRrnId());
         assertEquals(member.getEmail(), findMember.getEmail());
@@ -134,7 +133,7 @@ class MemberServiceTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -159,7 +158,7 @@ class MemberServiceTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -194,7 +193,7 @@ class MemberServiceTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -221,7 +220,7 @@ class MemberServiceTest {
         assertEquals(member.getId(), findMember.getId());
         assertEquals(member.getLoginId(), findMember.getLoginId());
         assertEquals(member.getPhoneNumber(), findMember.getPhoneNumber());
-        assertEquals(member.getPassword(), findMember.getPassword());
+        assertEquals(member.getPassword().getValue(), findMember.getPassword().getValue());
         assertEquals(member.getRrnId(), findMember.getRrnId());
         assertEquals(member.getBirth(), findMember.getBirth());
         assertEquals(member.getEmail(), findMember.getEmail());

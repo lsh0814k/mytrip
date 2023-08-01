@@ -3,14 +3,15 @@ package toy.mytrip.app.member.domain;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Member {
-    public Member() {}
 
     @Builder
-    public Member(Long id, String loginId, String password, String name, String rrnId, String birth, String email, String phoneNumber, Long mileage, Authority authority) {
+    public Member(Long id, String loginId, Password password, String name, String rrnId, String birth, String email, String phoneNumber, Long mileage, Authority authority) {
         this.id = id;
         this.loginId = loginId;
         this.password = password;
@@ -29,8 +30,8 @@ public class Member {
     @Column(length = 50)
     private String loginId;
 
-    @Column(length = 25)
-    private String password;
+    @Enumerated
+    private Password password;
 
     @Column(length = 100)
     private String name;

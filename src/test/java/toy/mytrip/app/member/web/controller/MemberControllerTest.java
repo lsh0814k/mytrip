@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import toy.mytrip.app.member.domain.Authority;
 import toy.mytrip.app.member.domain.Member;
+import toy.mytrip.app.member.domain.Password;
 import toy.mytrip.app.member.exception.MemberErrorCodes;
 import toy.mytrip.app.member.repository.MemberRepository;
 import toy.mytrip.app.member.web.request.MemberSaveForm;
@@ -46,7 +47,7 @@ class MemberControllerTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -90,7 +91,7 @@ class MemberControllerTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -182,11 +183,37 @@ class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("회원 저장(비밀번호와 비밀번호 확인이 다른 경우)")
+    void saveMember_diff_password_passwordConf() throws Exception {
+        // given
+        MemberSaveForm member = MemberSaveForm.builder()
+                .loginId("adminuser")
+                .password("qwe123!@#")
+                .passwordConf("123456789")
+                .name("관리자")
+                .rrnId("1241156")
+                .birth("931116")
+                .email("adminuser@gamil.com")
+                .phoneNumber("01051515321")
+                .authority(Authority.ADMIN.toString())
+                .build();
+        // expected
+        mockMvc.perform(post("/members")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(member))
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(MemberErrorCodes.DIFF_CONF_PASSWORD.getStatus()))
+                .andExpect(jsonPath("$.message").value(MemberErrorCodes.DIFF_CONF_PASSWORD.getErrorMessage()));
+    }
+
+    @Test
     @DisplayName("회원 삭제")
     void deleteMember() throws Exception {
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1241156")
                 .birth("931116")
@@ -224,7 +251,7 @@ class MemberControllerTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1241156")
                 .birth("931116")
