@@ -56,6 +56,18 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("회원 전체 조회(데이터 없는 경우)")
+    void findAll_empty_data() {
+        // when
+        List<Member> members = memberService.findAll();
+
+        // expected
+        assertNotNull(members);
+        assertEquals(0, members.size());
+    }
+
+
+    @Test
     @DisplayName("회원 단일 조회")
     void findMember() {
         // given
@@ -196,7 +208,6 @@ class MemberServiceTest {
         Member updateMember = Member.builder()
                 .name("일반 회원")
                 .loginId("adminuser")
-                .password("qwe123!@#")
                 .rrnId("1151321")
                 .birth("931116")
                 .email("adminuser@gamil.com")
@@ -225,12 +236,10 @@ class MemberServiceTest {
     void memberEdit_not_found() {
         // when
         MyTripException myTripException = assertThrows(MyTripException.class, () -> memberService.editMember(1L, Member.builder().build()));
-
-        // expected
         ErrorCode errorCode = myTripException.getErrorCode();
 
+        // expected
         assertEquals(MemberErrorCodes.NOT_FOUND.getErrorMessage(), errorCode.getErrorMessage());
         assertEquals(MemberErrorCodes.NOT_FOUND.getStatus(), errorCode.getStatus());
-
     }
 }
