@@ -15,6 +15,7 @@ import toy.mytrip.app.member.exception.MemberErrorCodes;
 import toy.mytrip.app.member.repository.MemberRepository;
 import toy.mytrip.app.member.web.request.MemberSaveForm;
 import toy.mytrip.app.member.web.request.MemberUpdateForm;
+import toy.mytrip.errors.codes.DefaultErrorCodes;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -206,6 +207,60 @@ class MemberControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(MemberErrorCodes.DIFF_CONF_PASSWORD.getStatus()))
                 .andExpect(jsonPath("$.message").value(MemberErrorCodes.DIFF_CONF_PASSWORD.getErrorMessage()));
+    }
+
+    @Test
+    @DisplayName("회원 저장(빈 값 체크)")
+    void saveMember_notEmpty() throws Exception {
+        // given
+        MemberSaveForm member = MemberSaveForm.builder()
+                .loginId("")
+                .password("")
+                .passwordConf("")
+                .name("")
+                .rrnId("")
+                .birth("")
+                .email("")
+                .phoneNumber("")
+                .authority(Authority.ADMIN.toString())
+                .build();
+
+        // expected
+        mockMvc.perform(post("/members")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(member))
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(DefaultErrorCodes.INPUT_VALUE_INVALID.getStatus()))
+                .andExpect(jsonPath("$.message").value(DefaultErrorCodes.INPUT_VALUE_INVALID.getErrorMessage()));
+    }
+
+    @Test
+    @DisplayName("회원 저장(null 체크)")
+    void saveMember_null_check() throws Exception {
+        // given
+        MemberSaveForm member = MemberSaveForm.builder()
+                .loginId(null)
+                .password(null)
+                .passwordConf(null)
+                .name(null)
+                .rrnId(null)
+                .birth(null)
+                .email(null)
+                .phoneNumber(null)
+                .authority(null)
+                .build();
+
+        // expected
+        mockMvc.perform(post("/members")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(member))
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(DefaultErrorCodes.INPUT_VALUE_INVALID.getStatus()))
+                .andExpect(jsonPath("$.message").value(DefaultErrorCodes.INPUT_VALUE_INVALID.getErrorMessage()));
     }
 
     @Test

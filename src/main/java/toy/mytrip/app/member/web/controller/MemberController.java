@@ -40,7 +40,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{id}")
-    public void editMember(@PathVariable Long id, @RequestBody MemberUpdateForm memberUpdateForm) {
+    public void editMember(@PathVariable Long id, @Valid @RequestBody MemberUpdateForm memberUpdateForm) {
         memberService.editMember(id, memberUpdateForm.toMember());
     }
 
