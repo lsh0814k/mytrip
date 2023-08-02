@@ -59,4 +59,52 @@ public class Member {
         this.UPDATE_TIME = LocalDateTime.now();
         this.UPDATE_ID = null;
     }
+
+    public MemberEditor.MemberEditorBuilder toEdit() {
+        return MemberEditor.builder()
+                .LOGIN_ID( LOGIN_ID)
+                .PASSWORD( PASSWORD)
+                .NAME( NAME)
+                .RRN_ID( RRN_ID)
+                .BIRTH( BIRTH)
+                .EMAIL( EMAIL)
+                .PHONE_NUMBER( PHONE_NUMBER)
+                .MILEAGE( MILEAGE)
+                .AUTHORITY( AUTHORITY)
+                .UPDATE_TIME( UPDATE_TIME)
+                .UPDATE_ID( UPDATE_ID);
+    }
+
+    public void edit( MemberEditor memberEditor) {
+        LOGIN_ID = memberEditor.getLOGIN_ID();
+        PASSWORD = memberEditor.getPASSWORD();
+        NAME = memberEditor.getNAME();
+        RRN_ID = memberEditor.getRRN_ID();
+        BIRTH = memberEditor.getBIRTH();
+        EMAIL = memberEditor.getEMAIL();
+        MILEAGE = memberEditor.getMILEAGE();
+        AUTHORITY = memberEditor.getAUTHORITY();
+        UPDATE_TIME = memberEditor.getUPDATE_TIME();
+        UPDATE_ID = memberEditor.getUPDATE_ID();
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "ID=" + ID +
+                ", LOGIN_ID='" + LOGIN_ID + '\'' +
+                ", PASSWORD='" + PASSWORD + '\'' +
+                ", NAME='" + NAME + '\'' +
+                ", RRN_ID='" + RRN_ID + '\'' +
+                ", BIRTH='" + BIRTH + '\'' +
+                ", EMAIL='" + EMAIL + '\'' +
+                ", PHONE_NUMBER='" + PHONE_NUMBER + '\'' +
+                ", MILEAGE=" + MILEAGE +
+                ", AUTHORITY='" + AUTHORITY + '\'' +
+                ", CREATE_TIME=" + CREATE_TIME +
+                ", CREATE_ID='" + CREATE_ID + '\'' +
+                ", UPDATE_TIME=" + UPDATE_TIME +
+                ", UPDATE_ID='" + UPDATE_ID + '\'' +
+                '}';
+    }
 }
