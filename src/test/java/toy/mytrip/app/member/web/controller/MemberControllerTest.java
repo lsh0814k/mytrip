@@ -206,7 +206,9 @@ class MemberControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(MemberErrorCodes.DIFF_CONF_PASSWORD.getStatus()))
-                .andExpect(jsonPath("$.message").value(MemberErrorCodes.DIFF_CONF_PASSWORD.getErrorMessage()));
+                .andExpect(jsonPath("$.message").value("입력값이 올바르지 않습니다."))
+                .andExpect(jsonPath("$.fieldErrorDetails[0].field").value("passwordConf"))
+                .andExpect(jsonPath("$.fieldErrorDetails[0].message").value(MemberErrorCodes.DIFF_CONF_PASSWORD.getErrorMessage()));
     }
 
     @Test

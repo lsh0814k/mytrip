@@ -63,7 +63,6 @@ public class MemberSaveForm {
 
     public Member createMember() {
         Password pwd = new Password(this.password);
-        pwd.checkConfPassword(this.passwordConf);
 
         return Member.builder()
                 .loginId(this.loginId)

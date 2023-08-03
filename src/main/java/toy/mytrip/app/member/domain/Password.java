@@ -5,8 +5,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import toy.mytrip.app.member.exception.MemberErrorCodes;
-import toy.mytrip.errors.exception.MyTripException;
 
 @Embeddable
 @NoArgsConstructor
@@ -17,15 +15,5 @@ public class Password {
 
     public Password(String value) {
         this.value = value;
-    }
-
-    private boolean isMatched(String password) {
-        return value.equals(password);
-    }
-
-    public void checkConfPassword(String passwordConf) {
-        if(! isMatched(passwordConf)) {
-            throw new MyTripException(MemberErrorCodes.DIFF_CONF_PASSWORD);
-        }
     }
 }
