@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import toy.mytrip.app.member.web.request.EditMember;
 
 import java.time.LocalDateTime;
 
@@ -22,89 +23,90 @@ public class Member {
     private Long ID;
 
     @NotNull
-    private String LOGIN_ID;
+    private String loginId;
     @NotNull
-    private String PASSWORD;
+    private String password;
     @NotNull
-    private String NAME;
+    private String name;
     @NotNull
-    private String RRN_ID;
+    private String rrnId;
     @NotNull
-    private String BIRTH;
+    private String birth;
     @NotNull
-    private String EMAIL;
+    private String email;
     @NotNull
-    private String PHONE_NUMBER;
-    private Long MILEAGE;
-    private String AUTHORITY;
-    private LocalDateTime CREATE_TIME;
-    private String CREATE_ID;
-    private LocalDateTime UPDATE_TIME;
-    private String UPDATE_ID;
+    private String phoneNumber;
+    private Long mileage;
+    private String authority;
+    private LocalDateTime createTime;
+    private String createId;
+    private LocalDateTime updateTime;
+    private String updateId;
 
     @Builder
-    public Member(Long ID, String LOGIN_ID, String PASSWORD, String NAME, String RRN_ID, String BIRTH, String EMAIL, String PHONE_NUMBER, Long MILEAGE, String AUTHORITY) {
+    public Member(Long ID, String loginId, String password, String name, String rrnId, String birth, String email, String phoneNumber, Long mileage, String authority) {
         this.ID = ID;
-        this.LOGIN_ID = LOGIN_ID;
-        this.PASSWORD = PASSWORD;
-        this.NAME = NAME;
-        this.RRN_ID = RRN_ID;
-        this.BIRTH = BIRTH;
-        this.EMAIL = EMAIL;
-        this.PHONE_NUMBER = PHONE_NUMBER;
-        this.MILEAGE = MILEAGE;
-        this.AUTHORITY = AUTHORITY;
-        this.CREATE_TIME = LocalDateTime.now();
-        this.CREATE_ID = null;
-        this.UPDATE_TIME = LocalDateTime.now();
-        this.UPDATE_ID = null;
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.rrnId = rrnId;
+        this.birth = birth;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.mileage = mileage;
+        this.authority = authority;
+        this.createTime = null;
+        this.createId = null;
+        this.updateTime = null;
+        this.updateId = null;
     }
 
-    public MemberEditor.MemberEditorBuilder toEdit() {
-        return MemberEditor.builder()
-                .LOGIN_ID( LOGIN_ID)
-                .PASSWORD( PASSWORD)
-                .NAME( NAME)
-                .RRN_ID( RRN_ID)
-                .BIRTH( BIRTH)
-                .EMAIL( EMAIL)
-                .PHONE_NUMBER( PHONE_NUMBER)
-                .MILEAGE( MILEAGE)
-                .AUTHORITY( AUTHORITY)
-                .UPDATE_TIME( UPDATE_TIME)
-                .UPDATE_ID( UPDATE_ID);
+    public EditMember.MemberEditorBuilder toEdit() {
+        return EditMember.builder()
+                .loginId( loginId)
+                .password( password)
+                .name( name)
+                .rrnId( rrnId)
+                .birth( birth)
+                .email( email)
+                .passwordCheck( phoneNumber)
+                .mileage( mileage)
+                .authority( authority)
+                .updateTime( updateTime)
+                .updateId( updateId);
     }
 
-    public void edit( MemberEditor memberEditor) {
-        LOGIN_ID = memberEditor.getLOGIN_ID();
-        PASSWORD = memberEditor.getPASSWORD();
-        NAME = memberEditor.getNAME();
-        RRN_ID = memberEditor.getRRN_ID();
-        BIRTH = memberEditor.getBIRTH();
-        EMAIL = memberEditor.getEMAIL();
-        MILEAGE = memberEditor.getMILEAGE();
-        AUTHORITY = memberEditor.getAUTHORITY();
-        UPDATE_TIME = memberEditor.getUPDATE_TIME();
-        UPDATE_ID = memberEditor.getUPDATE_ID();
+    public void edit( EditMember memberEditor) {
+        loginId = memberEditor.getLoginId();
+        password = memberEditor.getPassword();
+        name = memberEditor.getName();
+        rrnId = memberEditor.getRrnId();
+        birth = memberEditor.getBirth();
+        email = memberEditor.getEmail();
+        mileage = memberEditor.getMileage();
+        authority = memberEditor.getAuthority();
+        updateTime = memberEditor.getUpdateTime();
+        phoneNumber = memberEditor.getPhoneNumber();
+        updateId = memberEditor.getUpdateId();
     }
 
     @Override
     public String toString() {
         return "Member{" +
                 "ID=" + ID +
-                ", LOGIN_ID='" + LOGIN_ID + '\'' +
-                ", PASSWORD='" + PASSWORD + '\'' +
-                ", NAME='" + NAME + '\'' +
-                ", RRN_ID='" + RRN_ID + '\'' +
-                ", BIRTH='" + BIRTH + '\'' +
-                ", EMAIL='" + EMAIL + '\'' +
-                ", PHONE_NUMBER='" + PHONE_NUMBER + '\'' +
-                ", MILEAGE=" + MILEAGE +
-                ", AUTHORITY='" + AUTHORITY + '\'' +
-                ", CREATE_TIME=" + CREATE_TIME +
-                ", CREATE_ID='" + CREATE_ID + '\'' +
-                ", UPDATE_TIME=" + UPDATE_TIME +
-                ", UPDATE_ID='" + UPDATE_ID + '\'' +
+                ", loginId='" + loginId + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", rrnId='" + rrnId + '\'' +
+                ", birth='" + birth + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", mileage=" + mileage +
+                ", authority='" + authority + '\'' +
+                ", createTime=" + createTime +
+                ", createId='" + createId + '\'' +
+                ", updateTime=" + updateTime +
+                ", updateId='" + updateId + '\'' +
                 '}';
     }
 }

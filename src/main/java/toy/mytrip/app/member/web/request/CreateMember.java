@@ -1,5 +1,6 @@
 package toy.mytrip.app.member.web.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,48 +16,62 @@ import java.time.LocalDateTime;
 public class CreateMember {
 
     @NotNull( message = "아이디를 입력하세요.")
-    private String LOGIN_ID;
+    private String loginId;
+
     @NotNull( message = "비밀번호를 입력하세요.")
-    private String PASSWORD;
+    private String password;
+
     @NotNull( message = "비밀번호를 입력하세요.")
-    private String PASSWORD_CHECK;
+    private String passwordCheck;
+
     @NotNull( message = "이름을 입력하세요.")
-    private String NAME;
+    private String name;
+
     @NotNull( message = "주민번호를 입력하세요.")
-    private String RRN_ID;
+    private String rrnId;
+
     @NotNull( message = "생년월일을 입력하세요.")
-    private String BIRTH;
+    private String birth;
+
     @NotNull( message = "이메일을 입력하세요.")
-    private String EMAIL;
+    @Email( message = "이메일 형식이 올바르지 않습니다.")
+    private String email;
+
     @NotNull( message = "핸드폰번호를 입력하세요.")
-    private String PHONE_NUMBER;
-    private Long MILEAGE;
-    private String AUTHORITY;
-    private LocalDateTime CREATE_TIME;
-    private String CREATE_ID;
-    private LocalDateTime UPDATE_TIME;
-    private String UPDATE_ID;
+    private String phoneNumber;
+
+    private Long mileage;
+
+    private String authority;
+
+    private LocalDateTime createTime;
+
+    private String createId;
+
+    private LocalDateTime updateTime;
+
+    private String updateId;
 
     @Builder
-    public CreateMember(String LOGIN_ID, String PASSWORD, String PASSWORD_CHECK, String NAME, String RRN_ID, String BIRTH, String EMAIL, String PHONE_NUMBER, Long MILEAGE, String AUTHORITY) {
-        this.LOGIN_ID = LOGIN_ID;
-        this.PASSWORD = PASSWORD;
-        this.PASSWORD_CHECK = PASSWORD_CHECK;
-        this.NAME = NAME;
-        this.RRN_ID = RRN_ID;
-        this.BIRTH = BIRTH;
-        this.EMAIL = EMAIL;
-        this.PHONE_NUMBER = PHONE_NUMBER;
-        this.MILEAGE = MILEAGE;
-        this.AUTHORITY = AUTHORITY;
-        this.CREATE_TIME = LocalDateTime.now();
-        this.CREATE_ID = null;
-        this.UPDATE_TIME = LocalDateTime.now();
-        this.UPDATE_ID = null;
+    public CreateMember(String loginId, String password, String passwordCheck, String name, String rrnId, String birth, String email, String phoneNumber, Long mileage, String authority) {
+        this.loginId = loginId;
+        this.password = password;
+        this.passwordCheck = passwordCheck;
+        this.name = name;
+        this.rrnId = rrnId;
+        this.birth = birth;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.mileage = mileage;
+        this.authority = authority;
+        this.createTime = null;
+        this.createId = null;
+        this.updateTime = null;
+        this.updateId = null;
     }
 
     public void isValid() {
-        if( ! PASSWORD.equals( PASSWORD_CHECK)) {
+        if( ! password.equals( passwordCheck)) {
             throw new InvalidRequest( "password", "비밀번호를 일치하지 않습니다.");
         }
     }
