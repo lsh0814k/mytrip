@@ -125,10 +125,16 @@ class MemberServiceTest {
                 .build();
         memberRepository.save(member);
 
-        // expected
+        // when
+        MyTripException myTripException = assertThrows(MyTripException.class, () -> memberService.saveMember(member));
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST.value(), myTripException.getErrorCode().getStatus());
+        assertEquals("동일한 ID가 존재합니다.", myTripException.getErrorCode().getErrorMessage());
     }
 
     @Test
+    @DisplayName("회원 삭제")
     void deleteMember() {
         // given
         Member member = Member.builder()
@@ -152,11 +158,32 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("회원 수정")
+    @Transactional()
     void editMember() {
         // given
+        Member member = Member.builder()
+                .loginId("adminuser")
+                .password("qwe123!@#")
+                .name("관리자")
+                .rrnId("1151321")
+                .birth("931116")
+                .email("adminuser@gamil.com")
+                .phoneNumber("01051515321")
+                .authority(Authority.ADMIN)
+                .build();
+        memberRepository.save(member);
 
+        Member editMember = Member.builder()
+                .name("관리자2")
+                .build();
         // when
+        memberService.editMember(member.getId(), editMember);
+        Member findMember = memberRepository.findById(member.getId()).orElseThrow();
+
 
         // then
+        assertEquals(member.getLoginId(), findMember.getLoginId());
+        assertEquals(editMember.getName(), findMember.getName());
     }
 }
