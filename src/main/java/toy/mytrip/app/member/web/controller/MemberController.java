@@ -2,12 +2,14 @@ package toy.mytrip.app.member.web.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import toy.mytrip.app.member.domain.Member;
 import toy.mytrip.app.member.service.MemberService;
 import toy.mytrip.app.member.web.request.MemberSaveForm;
 import toy.mytrip.app.member.web.request.MemberUpdateForm;
 import toy.mytrip.app.member.web.response.MemberResponse;
+import toy.mytrip.app.member.web.validator.PasswordValidator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +18,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
+
+    @InitBinder
+    void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(new PasswordValidator());
+    }
 
     private final MemberService memberService;
 
@@ -40,7 +47,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{id}")
-    public void editMember(@PathVariable Long id, @RequestBody MemberUpdateForm memberUpdateForm) {
+    public void editMember(@PathVariable Long id, @Valid @RequestBody MemberUpdateForm memberUpdateForm) {
         memberService.editMember(id, memberUpdateForm.toMember());
     }
 

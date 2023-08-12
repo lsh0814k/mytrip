@@ -1,13 +1,15 @@
 package toy.mytrip.app.member.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import toy.mytrip.app.member.domain.Authority;
 import toy.mytrip.app.member.domain.Member;
+import toy.mytrip.app.member.domain.Password;
+import toy.mytrip.app.member.exception.MemberErrorCodes;
 import toy.mytrip.app.member.repository.MemberRepository;
 import toy.mytrip.errors.codes.ErrorCode;
 import toy.mytrip.errors.exception.MyTripException;
@@ -18,12 +20,16 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
 class MemberServiceTest {
     @Autowired
     private MemberService memberService;
     @Autowired
     private MemberRepository memberRepository;
+
+    @BeforeEach
+    void clear() {
+        memberRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("회원 전체 조회")
@@ -49,12 +55,24 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("회원 전체 조회(데이터 없는 경우)")
+    void findAll_empty_data() {
+        // when
+        List<Member> members = memberService.findAll();
+
+        // expected
+        assertNotNull(members);
+        assertEquals(0, members.size());
+    }
+
+
+    @Test
     @DisplayName("회원 단일 조회")
     void findMember() {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -87,7 +105,7 @@ class MemberServiceTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -101,7 +119,7 @@ class MemberServiceTest {
         Member findMember = memberRepository.findById(member.getId()).orElseThrow();
         // then
         assertEquals(member.getLoginId(), findMember.getLoginId());
-        assertEquals(member.getPassword(), findMember.getPassword());
+        assertEquals(member.getPassword().getValue(), findMember.getPassword().getValue());
         assertEquals(member.getName(), findMember.getName());
         assertEquals(member.getRrnId(), findMember.getRrnId());
         assertEquals(member.getEmail(), findMember.getEmail());
@@ -115,7 +133,7 @@ class MemberServiceTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -127,10 +145,11 @@ class MemberServiceTest {
 
         // when
         MyTripException myTripException = assertThrows(MyTripException.class, () -> memberService.saveMember(member));
+        ErrorCode errorCode = myTripException.getErrorCode();
 
         // then
-        assertEquals(HttpStatus.BAD_REQUEST.value(), myTripException.getErrorCode().getStatus());
-        assertEquals("동일한 ID가 존재합니다.", myTripException.getErrorCode().getErrorMessage());
+        assertEquals(MemberErrorCodes.DUPLICATE_LOGIN_ID.getStatus(), errorCode.getStatus());
+        assertEquals(MemberErrorCodes.DUPLICATE_LOGIN_ID.getErrorMessage(), errorCode.getErrorMessage());
     }
 
     @Test
@@ -139,7 +158,7 @@ class MemberServiceTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -158,13 +177,23 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("회원 삭제(존재하지 않는 회원인 경우)")
+    void deleteMember_not_found() {
+        // when
+        MyTripException myTripException = assertThrows(MyTripException.class, () -> memberService.deleteMember(1L));
+        ErrorCode errorCode = myTripException.getErrorCode();
+        // expected
+        assertEquals(MemberErrorCodes.NOT_FOUND.getErrorMessage(), errorCode.getErrorMessage());
+        assertEquals(MemberErrorCodes.NOT_FOUND.getStatus(), errorCode.getStatus());
+    }
+
+    @Test
     @DisplayName("회원 수정")
-    @Transactional()
     void editMember() {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
@@ -174,16 +203,42 @@ class MemberServiceTest {
                 .build();
         memberRepository.save(member);
 
-        Member editMember = Member.builder()
-                .name("관리자2")
-                .build();
         // when
-        memberService.editMember(member.getId(), editMember);
-        Member findMember = memberRepository.findById(member.getId()).orElseThrow();
-
+        Member updateMember = Member.builder()
+                .name("일반 회원")
+                .loginId("adminuser")
+                .rrnId("1151321")
+                .birth("931116")
+                .email("adminuser@gamil.com")
+                .phoneNumber("01051515321")
+                .authority(Authority.USER)
+                .build();
+        memberService.editMember(member.getId(), updateMember);
 
         // then
+        Member findMember = memberRepository.findById(member.getId()).get();
+        assertEquals(member.getId(), findMember.getId());
         assertEquals(member.getLoginId(), findMember.getLoginId());
-        assertEquals(editMember.getName(), findMember.getName());
+        assertEquals(member.getPhoneNumber(), findMember.getPhoneNumber());
+        assertEquals(member.getPassword().getValue(), findMember.getPassword().getValue());
+        assertEquals(member.getRrnId(), findMember.getRrnId());
+        assertEquals(member.getBirth(), findMember.getBirth());
+        assertEquals(member.getEmail(), findMember.getEmail());
+
+
+        assertEquals("일반 회원", findMember.getName());
+        assertEquals(Authority.USER, findMember.getAuthority());
+    }
+
+    @Test
+    @DisplayName("회원 수정(존재하지 않는 회원인 경우)")
+    void memberEdit_not_found() {
+        // when
+        MyTripException myTripException = assertThrows(MyTripException.class, () -> memberService.editMember(1L, Member.builder().build()));
+        ErrorCode errorCode = myTripException.getErrorCode();
+
+        // expected
+        assertEquals(MemberErrorCodes.NOT_FOUND.getErrorMessage(), errorCode.getErrorMessage());
+        assertEquals(MemberErrorCodes.NOT_FOUND.getStatus(), errorCode.getStatus());
     }
 }

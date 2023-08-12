@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import toy.mytrip.app.member.domain.Authority;
 import toy.mytrip.app.member.domain.Member;
+import toy.mytrip.app.member.domain.Password;
 
 @Getter
 @NoArgsConstructor
@@ -61,9 +62,11 @@ public class MemberSaveForm {
     }
 
     public Member createMember() {
+        Password pwd = new Password(this.password);
+
         return Member.builder()
                 .loginId(this.loginId)
-                .password(this.password)
+                .password(pwd)
                 .name(this.name)
                 .rrnId(this.rrnId)
                 .birth(this.birth)
