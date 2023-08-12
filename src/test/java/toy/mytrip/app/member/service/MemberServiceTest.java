@@ -37,7 +37,7 @@ class MemberServiceTest {
         // given
         Member member = Member.builder()
                 .loginId("adminuser")
-                .password("qwe123!@#")
+                .password(new Password("qwe123!@#"))
                 .name("관리자")
                 .rrnId("1151321")
                 .birth("931116")
